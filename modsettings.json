@@ -1,0 +1,148 @@
+{
+    "Version": "1.00",
+    "Sections": [
+	{
+            "Name": "GeneralSettings",
+            "Description": "Related To General Settings For The Mod",
+            "IsAdvanced": false,
+            "Keys": [
+				{
+                    "Value": true,
+                    "Name": "AllowHudHiding",
+                    "Description": "Allows Mod To Hide HUD Elements || Default = True",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                }
+            ],
+            "$version": "v1"
+        },
+		{
+            "Name": "HudHidingSettings",
+            "Description": "Related To Hiding Specific HUD Elements",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Value": false,
+                    "Name": "HideEverything",
+                    "Description": "Hides Every Vanilla HUD Element || Default = False",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+				{
+                    "Value": false,
+                    "Name": "HideCompass",
+                    "Description": "Hides Vanilla HUD Compass || Default = False",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+				{
+                    "Value": false,
+                    "Name": "HideVitals",
+                    "Description": "Hides Vanilla Health, Mana, And Fatigue Bars || Default = False",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+				{
+                    "Value": false,
+                    "Name": "HideCrosshair",
+                    "Description": "Hides Vanilla Crosshair In The Middle Of The Screen || Default = False",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+				{
+                    "Value": false,
+                    "Name": "HideInteractionModeIcon",
+                    "Description": "Hides Small Currently Active Interaction Mode Icon || Default = False",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+				{
+                    "Value": false,
+                    "Name": "HideActiveSpells",
+                    "Description": "Hides Currently Active Spell Effect Icons Or Buffs/Debuffs || Default = False",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+				{
+                    "Value": false,
+                    "Name": "HideArrowCount",
+                    "Description": "Hides Small Counter Of Arrows Currently In Inventory || Default = False",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+				{
+                    "Value": false,
+                    "Name": "HideBreathBar",
+                    "Description": "Hides Remaining Breath/Oxygen Bar When Underwater || Default = False",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+				{
+                    "Value": false,
+                    "Name": "HidePopupText",
+                    "Description": "Hides Popup Text Usually Near The Top Of The Screen || Default = False",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+				{
+                    "Value": false,
+                    "Name": "HideMidScreenText",
+                    "Description": "Hides Text That Can Sometimes Appears Below Or Near The Crosshair || Default = False",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+				{
+                    "Value": false,
+                    "Name": "HideEscortingFaces",
+                    "Description": "Hides NPC HUD Faces That Can Appear During Certain Quests || Default = False",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+				{
+                    "Value": false,
+                    "Name": "HideLocalQuestPlaces",
+                    "Description": "Hides Quest Debug Text If Using The Ingame Quest Debugging Tools || Default = False",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                }
+            ],
+            "$version": "v1"
+        },
+		{
+            "Name": " ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "  ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "MiscSettings",
+            "Description": "Related To Misc Settings And Options",
+            "IsAdvanced": false,
+            "Keys": [
+				{
+                    "Value": false,
+                    "Name": "EnableKeyPressQuickToggle",
+                    "Description": "Allows Quick Toggle Of HUD Visibility By Using The Keybind Below || Default = False",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+				{
+                    "Value": "O",
+                    "Name": "QuickToggleKey",
+                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = O",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
+                }
+            ],
+            "$version": "v1"
+        }
+    ]
+}
