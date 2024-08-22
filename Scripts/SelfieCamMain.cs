@@ -3,7 +3,7 @@
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
 // Author:          Kirk.O
 // Created On: 	    8/19/2024, 1:30 PM
-// Last Edit:		8/20/2024, 10:00 PM
+// Last Edit:		8/21/2024, 10:50 PM
 // Version:			1.00
 // Special Thanks:  
 // Modifier:
@@ -291,6 +291,8 @@ namespace SelfieCam
 
             paperDoll = SpawnPaperDoll(GameManager.Instance.PlayerObject.transform.position);
 
+            // Probably disable HUD stuff here. 
+
             GameManager.Instance.PlayerMotor.enabled = false;
             GameManager.Instance.RightHandWeapon.ShowWeapon = false;
             GameManager.Instance.WeaponManager.enabled = false;
@@ -341,8 +343,8 @@ namespace SelfieCam
 
         public GameObject SpawnPaperDoll(Vector3 position)
         {
-            GameObject go = new GameObject("Paper Doll");
-            go.transform.position = position; // Guess continue here tomorrow? 
+            GameObject go = new GameObject("Selfie Cam Paper Doll");
+            go.transform.position = position + new Vector3(0, 0.04f, 0); // This was to "fix" the left foot being slightly in the ground thing. 
 
             var billboard = go.AddComponent<DaggerfallBillboard>();
 

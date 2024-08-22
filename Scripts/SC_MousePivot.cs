@@ -62,6 +62,20 @@ namespace SelfieCam
             if (!enableMouseLook)
                 return;
 
+            // Handle mouse wheel (Zoom In & Out)
+            float mouseScroll = Input.GetAxis("Mouse ScrollWheel");
+            if (mouseScroll != 0)
+            {
+                if (mouseScroll > 0)
+                    pivot.transform.localScale = pivot.transform.localScale + new Vector3(-0.1f, -0.1f, -0.1f);
+                //pivot.transform.localPosition = pivot.transform.localPosition - pivot.transform.forward * -0.2f;
+                //pivot.transform.localPosition = pivot.transform.localPosition + new Vector3(0, 0, -0.2f);
+                else if (mouseScroll < 0)
+                    pivot.transform.localScale = pivot.transform.localScale + new Vector3(0.1f, 0.1f, 0.1f);
+                    //pivot.transform.localPosition = pivot.transform.localPosition - pivot.transform.forward * 0.2f;
+                    //pivot.transform.localPosition = pivot.transform.localPosition + new Vector3(0, 0, 0.2f);
+            }
+
             LookRotation();
         }
 
