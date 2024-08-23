@@ -3,7 +3,7 @@
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
 // Author:          Kirk.O
 // Created On: 	    8/19/2024, 1:30 PM
-// Last Edit:		8/21/2024, 10:50 PM
+// Last Edit:		8/22/2024, 9:50 PM
 // Version:			1.00
 // Special Thanks:  
 // Modifier:
@@ -70,6 +70,8 @@ namespace SelfieCam
 
         private bool showTorchBillboard = false;
         private Vector3 torchPosition;
+
+        public GameObject greenScreenObject;
 
         // Added by Third Person Camera Code
 
@@ -200,14 +202,68 @@ namespace SelfieCam
                     torch.transform.position = paperDoll.transform.position + dist.normalized * -torchDist + new Vector3(0, torchHeight, 0);
                 }
 
-                //Toggle DOF
-                if (InputManager.Instance.GetKeyDown(KeyCode.W))
+                if (InputManager.Instance.GetKey(KeyCode.W))
                 {
-                    volume.enabled = !volume.enabled;
+                    paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.forward * 0.05f;
+                    pivot.transform.position = paperDoll.transform.position + new Vector3(0, .06f, 0);
+                    if (greenScreenObject) { greenScreenObject.transform.position = paperDoll.transform.position; }
+                }
+                if (InputManager.Instance.GetKey(KeyCode.S))
+                {
+                    paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.forward * -0.05f;
+                    pivot.transform.position = paperDoll.transform.position + new Vector3(0, .06f, 0);
+                    if (greenScreenObject) { greenScreenObject.transform.position = paperDoll.transform.position; }
+                }
+                if (InputManager.Instance.GetKey(KeyCode.A))
+                {
+                    paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.right * -0.05f;
+                    pivot.transform.position = paperDoll.transform.position + new Vector3(0, .06f, 0);
+                    if (greenScreenObject) { greenScreenObject.transform.position = paperDoll.transform.position; }
+                }
+                if (InputManager.Instance.GetKey(KeyCode.D))
+                {
+                    paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.right * 0.05f;
+                    pivot.transform.position = paperDoll.transform.position + new Vector3(0, .06f, 0);
+                    if (greenScreenObject) { greenScreenObject.transform.position = paperDoll.transform.position; }
+                }
+                if (InputManager.Instance.GetKey(KeyCode.Space))
+                {
+                    paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.up * 0.05f;
+                    pivot.transform.position = paperDoll.transform.position + new Vector3(0, .06f, 0);
+                    if (greenScreenObject) { greenScreenObject.transform.position = paperDoll.transform.position; }
+                }
+                if (InputManager.Instance.GetKey(KeyCode.LeftShift))
+                {
+                    paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.up * -0.05f;
+                    pivot.transform.position = paperDoll.transform.position + new Vector3(0, .06f, 0);
+                    if (greenScreenObject) { greenScreenObject.transform.position = paperDoll.transform.position; }
                 }
 
+                // Create Greenscreen Object 
+                if (InputManager.Instance.GetKeyDown(KeyCode.F))
+                {
+                    if (!greenScreenObject)
+                    {
+                        greenScreenObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                        greenScreenObject.transform.position = paperDoll.transform.position;
+                        Renderer cubeRenderer = greenScreenObject.GetComponent<Renderer>();
+                        cubeRenderer.material.color = Color.green;
+                        cubeRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                    }
+                    else
+                    {
+                        Destroy(greenScreenObject);
+                    }
+                }
+
+                //Toggle DOF
+                /*if (InputManager.Instance.GetKeyDown(KeyCode.W))
+                {
+                    volume.enabled = !volume.enabled;
+                }*/
+
                 //Toggle layers
-                if (InputManager.Instance.GetKeyDown(KeyCode.S))
+                /*if (InputManager.Instance.GetKeyDown(KeyCode.S))
                 {
                     layer++;
 
@@ -221,7 +277,7 @@ namespace SelfieCam
 
                     DaggerfallUI.Instance.PaperDollRenderer.Refresh(layerFlags);
                     paperDoll.GetComponent<DaggerfallBillboard>().SetMaterial(DaggerfallUI.Instance.PaperDollRenderer.PaperDollTexture, new Vector2(1.4f, 2.2f));
-                }
+                }*/
             }
         }
 
@@ -234,6 +290,8 @@ namespace SelfieCam
 
             if (torchObject != null)
                 Destroy(torchObject);
+
+            if (greenScreenObject) { Destroy(greenScreenObject); }
 
             Destroy(paperDoll);
             paperDoll = null;
