@@ -3,7 +3,7 @@
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
 // Author:          Kirk.O
 // Created On: 	    8/19/2024, 1:30 PM
-// Last Edit:		8/22/2024, 9:50 PM
+// Last Edit:		8/23/2024, 11:30 PM
 // Version:			1.00
 // Special Thanks:  
 // Modifier:
@@ -28,7 +28,23 @@ namespace SelfieCam
         static Mod mod;
 
         // General Options
+        public static KeyCode SelfieModeToggleKey { get; set; }
+        public static bool HideHudInSelfieMode { get; set; }
+        public static bool SupressAIInSelfieMode { get; set; }
+        public static float SelfieModeYOffset { get; set; }
         public static bool AllowHiding { get; set; }
+
+        // Camera Options
+        public static float StartingZoomLevel { get; set; }
+        public static float ZoomIncrements { get; set; }
+        public static bool AllowZoomKeys { get; set; }
+        public static KeyCode ZoomInKey { get; set; }
+        public static KeyCode ZoomOutKey { get; set; }
+        public static bool AllowFreezeCameraKey { get; set; }
+        public static KeyCode FreezeCameraKey { get; set; }
+
+        // Movement Options
+        // Continue here tomorrow, I suppose. 
 
         // HUD Hiding Options
         public static bool HideEverything { get; set; }
@@ -49,7 +65,7 @@ namespace SelfieCam
         public static KeyCode QuickToggleKey { get; set; }
 
         // Variables
-        public static bool[] hudElements = { false, false, false, false, false, false, false, false, false, false, false }; // Compass, Vitals, Crosshair, InteractionModeIcon, ActiveSpells, ArrowCount, BreathBar, PopupText, MidScreenText, EscortingFaces, LocalQuestPlaces
+        public static bool[] hudOriginalValues = { false, false, false, false, false, false, false, false, false, false, false }; // Compass, Vitals, Crosshair, InteractionModeIcon, ActiveSpells, ArrowCount, BreathBar, PopupText, MidScreenText, EscortingFaces, LocalQuestPlaces
         public static bool QuickToggleState { get; set; }
 
         // Added by Third Person Camera Code
@@ -132,38 +148,6 @@ namespace SelfieCam
                 DaggerfallUI.AddHUDText("Invalid quick toggle keybind detected. Setting default. 'G' Key", 6f);
             }
 
-            if (AllowHiding)
-            {
-                if (HideEverything)
-                {
-                    for (int i = 0; i < hudElements.Length; i++)
-                    {
-                        hudElements[i] = true;
-                    }
-                }
-                else
-                {
-                    hudElements[0] = HideCompass ? true : false;
-                    hudElements[1] = HideVitals ? true : false;
-                    hudElements[2] = HideCrosshair ? true : false;
-                    hudElements[3] = HideInteractionModeIcon ? true : false;
-                    hudElements[4] = HideActiveSpells ? true : false;
-                    hudElements[5] = HideArrowCount ? true : false;
-                    hudElements[6] = HideBreathBar ? true : false;
-                    hudElements[7] = HidePopupText ? true : false;
-                    hudElements[8] = HideMidScreenText ? true : false;
-                    hudElements[9] = HideEscortingFaces ? true : false;
-                    hudElements[10] = HideLocalQuestPlaces ? true : false;
-                }
-            }
-            else
-            {
-                for (int i = 0; i < hudElements.Length; i++)
-                {
-                    hudElements[i] = false;
-                }
-            }
-
             if (AllowKeyPressQuickToggle && QuickToggleState)
             {
             }
@@ -181,9 +165,13 @@ namespace SelfieCam
             if (!GameManager.IsGamePaused && InputManager.Instance.GetAnyKeyDown() == QuickToggleKey)
             {
                 if (paperDoll)
+                {
+                    AutoUnhideHUD();
                     StopPaperDoll();
+                }
                 else
                 {
+                    AutoHideHUD();
                     StartPaperDoll();
                 }
             }
@@ -206,61 +194,47 @@ namespace SelfieCam
                 {
                     paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.forward * 0.05f;
                     pivot.transform.position = paperDoll.transform.position + new Vector3(0, .06f, 0);
-                    if (greenScreenObject) { greenScreenObject.transform.position = paperDoll.transform.position; }
                 }
                 if (InputManager.Instance.GetKey(KeyCode.S))
                 {
                     paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.forward * -0.05f;
                     pivot.transform.position = paperDoll.transform.position + new Vector3(0, .06f, 0);
-                    if (greenScreenObject) { greenScreenObject.transform.position = paperDoll.transform.position; }
                 }
                 if (InputManager.Instance.GetKey(KeyCode.A))
                 {
                     paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.right * -0.05f;
                     pivot.transform.position = paperDoll.transform.position + new Vector3(0, .06f, 0);
-                    if (greenScreenObject) { greenScreenObject.transform.position = paperDoll.transform.position; }
                 }
                 if (InputManager.Instance.GetKey(KeyCode.D))
                 {
                     paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.right * 0.05f;
                     pivot.transform.position = paperDoll.transform.position + new Vector3(0, .06f, 0);
-                    if (greenScreenObject) { greenScreenObject.transform.position = paperDoll.transform.position; }
                 }
                 if (InputManager.Instance.GetKey(KeyCode.Space))
                 {
-                    paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.up * 0.05f;
+                    paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.up * -0.05f;
                     pivot.transform.position = paperDoll.transform.position + new Vector3(0, .06f, 0);
-                    if (greenScreenObject) { greenScreenObject.transform.position = paperDoll.transform.position; }
                 }
                 if (InputManager.Instance.GetKey(KeyCode.LeftShift))
                 {
-                    paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.up * -0.05f;
+                    paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.up * 0.05f;
                     pivot.transform.position = paperDoll.transform.position + new Vector3(0, .06f, 0);
-                    if (greenScreenObject) { greenScreenObject.transform.position = paperDoll.transform.position; }
                 }
 
-                // Create Greenscreen Object 
+                // Update greenscreen object position if it exists, this way it will follow properly if moving camera view around, etc. 
+                if (greenScreenObject) { greenScreenObject.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.forward * 0.25f; }
+
+                // Toggle Greenscreen Object 
                 if (InputManager.Instance.GetKeyDown(KeyCode.F))
                 {
-                    if (!greenScreenObject)
-                    {
-                        greenScreenObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                        greenScreenObject.transform.position = paperDoll.transform.position;
-                        Renderer cubeRenderer = greenScreenObject.GetComponent<Renderer>();
-                        cubeRenderer.material.color = Color.green;
-                        cubeRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                    }
-                    else
-                    {
-                        Destroy(greenScreenObject);
-                    }
+                    ToggleGreenScreenObject();
                 }
 
                 //Toggle DOF
-                /*if (InputManager.Instance.GetKeyDown(KeyCode.W))
+                if (InputManager.Instance.GetKeyDown(KeyCode.G))
                 {
                     volume.enabled = !volume.enabled;
-                }*/
+                }
 
                 //Toggle layers
                 /*if (InputManager.Instance.GetKeyDown(KeyCode.S))
@@ -278,6 +252,57 @@ namespace SelfieCam
                     DaggerfallUI.Instance.PaperDollRenderer.Refresh(layerFlags);
                     paperDoll.GetComponent<DaggerfallBillboard>().SetMaterial(DaggerfallUI.Instance.PaperDollRenderer.PaperDollTexture, new Vector2(1.4f, 2.2f));
                 }*/
+            }
+        }
+
+        public void AutoHideHUD()
+        {
+            DaggerfallHUD dfuHud = DaggerfallUI.Instance.DaggerfallHUD;
+
+            hudOriginalValues[0] = dfuHud.ShowCompass;
+            hudOriginalValues[1] = dfuHud.ShowVitals;
+            hudOriginalValues[2] = dfuHud.ShowCrosshair;
+            hudOriginalValues[3] = dfuHud.ShowInteractionModeIcon;
+            hudOriginalValues[4] = dfuHud.ShowActiveSpells;
+            hudOriginalValues[5] = dfuHud.ShowArrowCount;
+            hudOriginalValues[6] = dfuHud.ShowBreathBar;
+            hudOriginalValues[7] = dfuHud.ShowPopupText;
+            hudOriginalValues[8] = dfuHud.ShowMidScreenText;
+            hudOriginalValues[9] = dfuHud.ShowEscortingFaces;
+            hudOriginalValues[10] = dfuHud.ShowLocalQuestPlaces;
+
+            dfuHud.ShowCompass = false;
+            dfuHud.ShowVitals = false;
+            dfuHud.ShowCrosshair = false;
+            dfuHud.ShowInteractionModeIcon = false;
+            dfuHud.ShowActiveSpells = false;
+            dfuHud.ShowArrowCount = false;
+            dfuHud.ShowBreathBar = false;
+            dfuHud.ShowPopupText = false;
+            dfuHud.ShowMidScreenText = false;
+            dfuHud.ShowEscortingFaces = false;
+            dfuHud.ShowLocalQuestPlaces = false;
+        }
+
+        public void AutoUnhideHUD()
+        {
+            DaggerfallHUD dfuHud = DaggerfallUI.Instance.DaggerfallHUD;
+
+            dfuHud.ShowCompass = hudOriginalValues[0];
+            dfuHud.ShowVitals = hudOriginalValues[1];
+            dfuHud.ShowCrosshair = hudOriginalValues[2];
+            dfuHud.ShowInteractionModeIcon = hudOriginalValues[3];
+            dfuHud.ShowActiveSpells = hudOriginalValues[4];
+            dfuHud.ShowArrowCount = hudOriginalValues[5];
+            dfuHud.ShowBreathBar = hudOriginalValues[6];
+            dfuHud.ShowPopupText = hudOriginalValues[7];
+            dfuHud.ShowMidScreenText = hudOriginalValues[8];
+            dfuHud.ShowEscortingFaces = hudOriginalValues[9];
+            dfuHud.ShowLocalQuestPlaces = hudOriginalValues[10];
+
+            for (int i = 0; i < hudOriginalValues.Length; i++)
+            {
+                hudOriginalValues[i] = false;
             }
         }
 
@@ -422,6 +447,35 @@ namespace SelfieCam
             DaggerfallBillboard billboard = torchObject.AddComponent<DaggerfallBillboard>();
             billboard.SetMaterial(210, 16);
 
+        }
+
+        public void ToggleGreenScreenObject()
+        {
+            if (!greenScreenObject)
+            {
+                greenScreenObject = new GameObject("Green Screen Sprite");
+                greenScreenObject.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.forward * 0.25f;
+
+                var billboard = greenScreenObject.AddComponent<DaggerfallBillboard>();
+
+                Texture2D texture = new Texture2D(4, 4);
+                Color[] greenColors = new Color[4 * 4];
+                Color greenColor = Color.green;
+
+                for (int i = 0; i < greenColors.Length; i++)
+                {
+                    greenColors[i] = greenColor;
+                }
+
+                texture.SetPixels(greenColors);
+                texture.Apply();
+
+                billboard.SetMaterial(texture, new Vector2(4, 4));
+            }
+            else
+            {
+                Destroy(greenScreenObject);
+            }
         }
     }
 }

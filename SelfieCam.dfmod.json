@@ -5,7 +5,7 @@
     "ContactInfo": "kirkoliveri@gmail.com",
     "DFUnity_Version": "1.0.0",
     "ModDescription": "View Your Character's Paperdoll From A 3rd Person Perspective, With Other Useful Features.",
-    "GUID": "c9a4af93-93ed-4f1b-b079-16f2af4a7f2d",
+    "GUID": "564c3940-906a-49fa-9eff-3fd888037fbe",
     "Files": [
         "Assets/Game/Mods/DFU-Mod_Selfie-Cam/modsettings.json",
         "Assets/Game/Mods/DFU-Mod_Selfie-Cam/Scripts/SelfieCamMain.cs",
