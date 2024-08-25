@@ -7,103 +7,95 @@
             "IsAdvanced": false,
             "Keys": [
 				{
+                    "Value": "O",
+                    "Name": "SelfieModeToggleKey",
+                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = O",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
+                },
+				{
                     "Value": true,
-                    "Name": "AllowHudHiding",
+                    "Name": "AutoHideHud",
                     "Description": "Allows Mod To Hide HUD Elements || Default = True",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+				{
+                    "Value": true,
+                    "Name": "SupressAiInSelfieMode",
+                    "Description": "Allows Mod To Hide HUD Elements || Default = True",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+				{
+                    "Min": 1,
+                    "Max": 100,
+                    "Value": 54,
+                    "Name": "InitialYOffset",
+                    "Description": "Changes X Position Of Progress Bars",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
                 }
             ],
             "$version": "v1"
         },
 		{
-            "Name": "HudHidingSettings",
+            "Name": "CameraSettings",
             "Description": "Related To Hiding Specific HUD Elements",
             "IsAdvanced": false,
             "Keys": [
-                {
+				{
+                    "Min": 0.1,
+                    "Max": 5.0,
+                    "Value": 1.0,
+                    "Name": "StartingZoomLevel",
+                    "Description": "Volume That Notification Sounds Will Play",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderFloatKey"
+                },
+				{
+                    "Min": 1,
+                    "Max": 100,
+                    "Value": 10,
+                    "Name": "ZoomIncrements",
+                    "Description": "Changes X Position Of Progress Bars",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
+                },
+				{
                     "Value": false,
-                    "Name": "HideEverything",
-                    "Description": "Hides Every Vanilla HUD Element || Default = False",
+                    "Name": "AllowZoomKeys",
+                    "Description": "Allows Mod To Hide HUD Elements || Default = False",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
                 },
 				{
+                    "Value": "J",
+                    "Name": "ZoomInKey",
+                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = J",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
+                },
+				{
+                    "Value": "N",
+                    "Name": "ZoomOutKey",
+                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = N",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
+                },
+				{
                     "Value": false,
-                    "Name": "HideCompass",
-                    "Description": "Hides Vanilla HUD Compass || Default = False",
+                    "Name": "AllowFreezeCameraKey",
+                    "Description": "Allows Mod To Hide HUD Elements || Default = False",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
                 },
 				{
-                    "Value": false,
-                    "Name": "HideVitals",
-                    "Description": "Hides Vanilla Health, Mana, And Fatigue Bars || Default = False",
+                    "Value": "K",
+                    "Name": "FreezeCameraKey",
+                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = K",
                     "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
-                },
-				{
-                    "Value": false,
-                    "Name": "HideCrosshair",
-                    "Description": "Hides Vanilla Crosshair In The Middle Of The Screen || Default = False",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
-                },
-				{
-                    "Value": false,
-                    "Name": "HideInteractionModeIcon",
-                    "Description": "Hides Small Currently Active Interaction Mode Icon || Default = False",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
-                },
-				{
-                    "Value": false,
-                    "Name": "HideActiveSpells",
-                    "Description": "Hides Currently Active Spell Effect Icons Or Buffs/Debuffs || Default = False",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
-                },
-				{
-                    "Value": false,
-                    "Name": "HideArrowCount",
-                    "Description": "Hides Small Counter Of Arrows Currently In Inventory || Default = False",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
-                },
-				{
-                    "Value": false,
-                    "Name": "HideBreathBar",
-                    "Description": "Hides Remaining Breath/Oxygen Bar When Underwater || Default = False",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
-                },
-				{
-                    "Value": false,
-                    "Name": "HidePopupText",
-                    "Description": "Hides Popup Text Usually Near The Top Of The Screen || Default = False",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
-                },
-				{
-                    "Value": false,
-                    "Name": "HideMidScreenText",
-                    "Description": "Hides Text That Can Sometimes Appears Below Or Near The Crosshair || Default = False",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
-                },
-				{
-                    "Value": false,
-                    "Name": "HideEscortingFaces",
-                    "Description": "Hides NPC HUD Faces That Can Appear During Certain Quests || Default = False",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
-                },
-				{
-                    "Value": false,
-                    "Name": "HideLocalQuestPlaces",
-                    "Description": "Hides Quest Debug Text If Using The Ingame Quest Debugging Tools || Default = False",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
                 }
             ],
             "$version": "v1"
@@ -123,21 +115,146 @@
             "$version": "v1"
         },
 		{
-            "Name": "MiscSettings",
+            "Name": "MovementSettings",
             "Description": "Related To Misc Settings And Options",
             "IsAdvanced": false,
             "Keys": [
 				{
-                    "Value": false,
-                    "Name": "EnableKeyPressQuickToggle",
-                    "Description": "Allows Quick Toggle Of HUD Visibility By Using The Keybind Below || Default = False",
+                    "Value": true,
+                    "Name": "AllowPaperdollMovement",
+                    "Description": "Allows Mod To Hide HUD Elements || Default = True",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
                 },
 				{
-                    "Value": "O",
-                    "Name": "QuickToggleKey",
-                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = O",
+                    "Min": 1,
+                    "Max": 20,
+                    "Value": 5,
+                    "Name": "PaperdollMovementSpeed",
+                    "Description": "Changes X Position Of Progress Bars",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
+                },
+				{
+                    "Value": "W",
+                    "Name": "MoveForwardKey",
+                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = W",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
+                },
+				{
+                    "Value": "S",
+                    "Name": "MoveBackwardKey",
+                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = S",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
+                },
+				{
+                    "Value": "A",
+                    "Name": "MoveLeftKey",
+                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = A",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
+                },
+				{
+                    "Value": "D",
+                    "Name": "MoveRightKey",
+                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = D",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
+                },
+				{
+                    "Value": "Y",
+                    "Name": "MoveUpKey",
+                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = Y",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
+                },
+				{
+                    "Value": "H",
+                    "Name": "MoveDownKey",
+                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = H",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
+                }
+            ],
+            "$version": "v1"
+        },
+		{
+            "Name": "DepthOfFieldSettings",
+            "Description": "Related To Hiding Specific HUD Elements",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Value": false,
+                    "Name": "AllowDepthOfField",
+                    "Description": "Allows Mod To Hide HUD Elements || Default = False",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+				{
+                    "Value": true,
+                    "Name": "DofStartingState",
+                    "Description": "Allows Mod To Hide HUD Elements || Default = True",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+				{
+                    "Value": "U",
+                    "Name": "DepthOfFieldToggleKey",
+                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = U",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
+                }
+            ],
+            "$version": "v1"
+        },
+		{
+            "Name": "GreenScreenSettings",
+            "Description": "Related To Hiding Specific HUD Elements",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Value": false,
+                    "Name": "AllowGreenScreen",
+                    "Description": "Allows Mod To Hide HUD Elements || Default = False",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+				{
+                    "Min": 1,
+                    "Max": 20,
+                    "Value": 4,
+                    "Name": "GreenScreenWidth",
+                    "Description": "Changes X Position Of Progress Bars",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
+                },
+				{
+                    "Min": 1,
+                    "Max": 20,
+                    "Value": 4,
+                    "Name": "GreenScreenHeight",
+                    "Description": "Changes X Position Of Progress Bars",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
+                },
+				{
+                    "Value": {
+                        "r": 0,
+                        "g": 255,
+                        "b": 0,
+                        "a": 255
+                    },
+                    "Name": "GreenScreenColor",
+                    "Description": "Color Used For The Progress Bar When Skill Is Ready To Level",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ColorKey"
+                },
+				{
+                    "Value": "G",
+                    "Name": "GreenScreenToggleKey",
+                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = G",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
                 }

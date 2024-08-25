@@ -66,17 +66,31 @@ namespace SelfieCam
             float mouseScroll = Input.GetAxis("Mouse ScrollWheel");
             if (mouseScroll != 0)
             {
+                float incs = SelfieCamMain.ZoomIncrements * 0.01f;
+
                 if (mouseScroll > 0)
-                    pivot.transform.localScale = pivot.transform.localScale + new Vector3(-0.1f, -0.1f, -0.1f);
-                //pivot.transform.localPosition = pivot.transform.localPosition - pivot.transform.forward * -0.2f;
-                //pivot.transform.localPosition = pivot.transform.localPosition + new Vector3(0, 0, -0.2f);
+                    pivot.transform.localScale = pivot.transform.localScale + new Vector3(-incs, -incs, -incs);
                 else if (mouseScroll < 0)
-                    pivot.transform.localScale = pivot.transform.localScale + new Vector3(0.1f, 0.1f, 0.1f);
-                    //pivot.transform.localPosition = pivot.transform.localPosition - pivot.transform.forward * 0.2f;
-                    //pivot.transform.localPosition = pivot.transform.localPosition + new Vector3(0, 0, 0.2f);
+                    pivot.transform.localScale = pivot.transform.localScale + new Vector3(incs, incs, incs);
             }
 
-            LookRotation();
+            // Handle hotkey activated zooming (Zoom In & Out)
+            if (SelfieCamMain.AllowZoomKeys)
+            {
+                if (InputManager.Instance.GetKey(SelfieCamMain.ZoomInKey))
+                {
+                    float incs = SelfieCamMain.ZoomIncrements * 0.01f;
+                    pivot.transform.localScale = pivot.transform.localScale + new Vector3(-incs, -incs, -incs);
+                }
+                if (InputManager.Instance.GetKey(SelfieCamMain.ZoomOutKey))
+                {
+                    float incs = SelfieCamMain.ZoomIncrements * 0.01f;
+                    pivot.transform.localScale = pivot.transform.localScale + new Vector3(incs, incs, incs);
+                }
+            }
+
+            if (!SelfieCamMain.cameraLookFrozen)
+                LookRotation();
         }
 
         public void LookRotation(float sensitivityMultiplier = 1, bool useTimescale = true)

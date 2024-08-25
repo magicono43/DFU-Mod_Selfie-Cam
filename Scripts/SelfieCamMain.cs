@@ -3,7 +3,7 @@
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
 // Author:          Kirk.O
 // Created On: 	    8/19/2024, 1:30 PM
-// Last Edit:		8/23/2024, 11:30 PM
+// Last Edit:		8/24/2024, 11:30 PM
 // Version:			1.00
 // Special Thanks:  
 // Modifier:
@@ -31,12 +31,11 @@ namespace SelfieCam
         public static KeyCode SelfieModeToggleKey { get; set; }
         public static bool HideHudInSelfieMode { get; set; }
         public static bool SupressAIInSelfieMode { get; set; }
-        public static float SelfieModeYOffset { get; set; }
-        public static bool AllowHiding { get; set; }
+        public static int SelfieModeYOffset { get; set; }
 
         // Camera Options
         public static float StartingZoomLevel { get; set; }
-        public static float ZoomIncrements { get; set; }
+        public static int ZoomIncrements { get; set; }
         public static bool AllowZoomKeys { get; set; }
         public static KeyCode ZoomInKey { get; set; }
         public static KeyCode ZoomOutKey { get; set; }
@@ -44,29 +43,32 @@ namespace SelfieCam
         public static KeyCode FreezeCameraKey { get; set; }
 
         // Movement Options
-        // Continue here tomorrow, I suppose. 
+        public static bool AllowPaperdollMovement { get; set; }
+        public static int PaperdollMovementSpeed { get; set; }
+        public static KeyCode MoveForwardKey { get; set; }
+        public static KeyCode MoveBackwardKey { get; set; }
+        public static KeyCode MoveLeftKey { get; set; }
+        public static KeyCode MoveRightKey { get; set; }
+        public static KeyCode MoveUpKey { get; set; }
+        public static KeyCode MoveDownKey { get; set; }
 
-        // HUD Hiding Options
-        public static bool HideEverything { get; set; }
-        public static bool HideCompass { get; set; }
-        public static bool HideVitals { get; set; }
-        public static bool HideCrosshair { get; set; }
-        public static bool HideInteractionModeIcon { get; set; }
-        public static bool HideActiveSpells { get; set; }
-        public static bool HideArrowCount { get; set; }
-        public static bool HideBreathBar { get; set; }
-        public static bool HidePopupText { get; set; }
-        public static bool HideMidScreenText { get; set; }
-        public static bool HideEscortingFaces { get; set; }
-        public static bool HideLocalQuestPlaces { get; set; }
+        // Depth Of Field Options
+        public static bool AllowDepthOfField { get; set; }
+        public static bool DepthOfFieldStartingState { get; set; }
+        public static KeyCode DepthOfFieldToggleKey { get; set; }
 
-        // Misc Options
-        public static bool AllowKeyPressQuickToggle { get; set; }
-        public static KeyCode QuickToggleKey { get; set; }
+        // Green Screen Options
+        public static bool AllowGreenScreen { get; set; }
+        public static int GreenScreenWidth { get; set; }
+        public static int GreenScreenHeight { get; set; }
+        public static Color32 GreenScreenColor { get; set; }
+        public static KeyCode GreenScreenToggleKey { get; set; }
 
         // Variables
         public static bool[] hudOriginalValues = { false, false, false, false, false, false, false, false, false, false, false }; // Compass, Vitals, Crosshair, InteractionModeIcon, ActiveSpells, ArrowCount, BreathBar, PopupText, MidScreenText, EscortingFaces, LocalQuestPlaces
-        public static bool QuickToggleState { get; set; }
+        public static bool hidingHud = false;
+        public static bool aiWasSupressed = false;
+        public static bool cameraLookFrozen = false;
 
         // Added by Third Person Camera Code
 
@@ -74,8 +76,7 @@ namespace SelfieCam
         private GameObject pivot;
         private Transform previousCameraParent;
         private PostProcessVolume volume;
-        private int layer;
-        private Camera camera;
+        private Camera scCamera;
         private bool headBobberEnabled;
         private GameObject torch;
 
@@ -109,51 +110,97 @@ namespace SelfieCam
 
             Instance = this;
 
-            QuickToggleState = false;
-
             mod.LoadSettings();
 
-            //StartGameBehaviour.OnStartGame += RefreshHUDVisibility_OnStartGame;
-            //SaveLoadManager.OnLoad += RefreshHUDVisibility_OnSaveLoad;
+            StartGameBehaviour.OnStartGame += RefreshHUDVisibility_OnStartGame;
+            SaveLoadManager.OnLoad += RefreshHUDVisibility_OnSaveLoad;
 
             Debug.Log("Finished mod init: Selfie Cam");
         }
 
         private static void LoadSettings(ModSettings modSettings, ModSettingsChange change)
         {
-            AllowHiding = mod.GetSettings().GetValue<bool>("GeneralSettings", "AllowHudHiding");
+            SelfieModeToggleKey = RegisterModFunctionKey("GeneralSettings", "SelfieModeToggleKey", KeyCode.O);
+            HideHudInSelfieMode = mod.GetSettings().GetValue<bool>("GeneralSettings", "AutoHideHud");
+            SupressAIInSelfieMode = mod.GetSettings().GetValue<bool>("GeneralSettings", "SupressAiInSelfieMode");
+            SelfieModeYOffset = mod.GetSettings().GetValue<int>("GeneralSettings", "InitialYOffset");
 
-            HideEverything = mod.GetSettings().GetValue<bool>("HudHidingSettings", "HideEverything");
-            HideCompass = mod.GetSettings().GetValue<bool>("HudHidingSettings", "HideCompass");
-            HideVitals = mod.GetSettings().GetValue<bool>("HudHidingSettings", "HideVitals");
-            HideCrosshair = mod.GetSettings().GetValue<bool>("HudHidingSettings", "HideCrosshair");
-            HideInteractionModeIcon = mod.GetSettings().GetValue<bool>("HudHidingSettings", "HideInteractionModeIcon");
-            HideActiveSpells = mod.GetSettings().GetValue<bool>("HudHidingSettings", "HideActiveSpells");
-            HideArrowCount = mod.GetSettings().GetValue<bool>("HudHidingSettings", "HideArrowCount");
-            HideBreathBar = mod.GetSettings().GetValue<bool>("HudHidingSettings", "HideBreathBar");
-            HidePopupText = mod.GetSettings().GetValue<bool>("HudHidingSettings", "HidePopupText");
-            HideMidScreenText = mod.GetSettings().GetValue<bool>("HudHidingSettings", "HideMidScreenText");
-            HideEscortingFaces = mod.GetSettings().GetValue<bool>("HudHidingSettings", "HideEscortingFaces");
-            HideLocalQuestPlaces = mod.GetSettings().GetValue<bool>("HudHidingSettings", "HideLocalQuestPlaces");
+            StartingZoomLevel = mod.GetSettings().GetValue<float>("CameraSettings", "StartingZoomLevel");
+            ZoomIncrements = mod.GetSettings().GetValue<int>("CameraSettings", "ZoomIncrements");
+            AllowZoomKeys = mod.GetSettings().GetValue<bool>("CameraSettings", "AllowZoomKeys");
+            ZoomInKey = RegisterModFunctionKey("CameraSettings", "ZoomInKey", KeyCode.J);
+            ZoomOutKey = RegisterModFunctionKey("CameraSettings", "ZoomOutKey", KeyCode.N);
+            AllowFreezeCameraKey = mod.GetSettings().GetValue<bool>("CameraSettings", "AllowFreezeCameraKey");
+            FreezeCameraKey = RegisterModFunctionKey("CameraSettings", "FreezeCameraKey", KeyCode.K);
 
-            AllowKeyPressQuickToggle = mod.GetSettings().GetValue<bool>("MiscSettings", "EnableKeyPressQuickToggle");
-            var quickToggleKeyText = mod.GetSettings().GetValue<string>("MiscSettings", "QuickToggleKey");
-            if (Enum.TryParse(quickToggleKeyText, out KeyCode result))
-                QuickToggleKey = result;
+            AllowPaperdollMovement = mod.GetSettings().GetValue<bool>("MovementSettings", "AllowPaperdollMovement");
+            PaperdollMovementSpeed = mod.GetSettings().GetValue<int>("MovementSettings", "PaperdollMovementSpeed");
+            MoveForwardKey = RegisterModFunctionKey("MovementSettings", "MoveForwardKey", KeyCode.W);
+            MoveBackwardKey = RegisterModFunctionKey("MovementSettings", "MoveBackwardKey", KeyCode.S);
+            MoveLeftKey = RegisterModFunctionKey("MovementSettings", "MoveLeftKey", KeyCode.A);
+            MoveRightKey = RegisterModFunctionKey("MovementSettings", "MoveRightKey", KeyCode.D);
+            MoveUpKey = RegisterModFunctionKey("MovementSettings", "MoveUpKey", KeyCode.Y);
+            MoveDownKey = RegisterModFunctionKey("MovementSettings", "MoveDownKey", KeyCode.H);
+
+            AllowDepthOfField = mod.GetSettings().GetValue<bool>("DepthOfFieldSettings", "AllowDepthOfField");
+            DepthOfFieldStartingState = mod.GetSettings().GetValue<bool>("DepthOfFieldSettings", "DofStartingState");
+            DepthOfFieldToggleKey = RegisterModFunctionKey("DepthOfFieldSettings", "DepthOfFieldToggleKey", KeyCode.U);
+
+            AllowGreenScreen = mod.GetSettings().GetValue<bool>("GreenScreenSettings", "AllowGreenScreen");
+            GreenScreenWidth = mod.GetSettings().GetValue<int>("GreenScreenSettings", "GreenScreenWidth");
+            GreenScreenHeight = mod.GetSettings().GetValue<int>("GreenScreenSettings", "GreenScreenHeight");
+            GreenScreenColor = mod.GetSettings().GetValue<Color32>("GreenScreenSettings", "GreenScreenColor");
+            GreenScreenToggleKey = RegisterModFunctionKey("GreenScreenSettings", "GreenScreenToggleKey", KeyCode.G);
+
+            if (!HideHudInSelfieMode && hidingHud) { AutoUnhideHUD(); hidingHud = false; }
+
+            if (!SupressAIInSelfieMode && aiWasSupressed && GameManager.Instance != null)
+            {
+                GameManager.Instance.DisableAI = false;
+                aiWasSupressed = false;
+            }
+
+            if (!AllowFreezeCameraKey && cameraLookFrozen) { cameraLookFrozen = false; }
+        }
+
+        public static KeyCode RegisterModFunctionKey(string group, string optionName, KeyCode defaultKey)
+        {
+            string keyText = mod.GetSettings().GetValue<string>(group, optionName);
+            if (Enum.TryParse(keyText, out KeyCode result))
+                return result;
             else
             {
-                QuickToggleKey = KeyCode.G;
-                Debug.Log("Selfie Cam: Invalid quick toggle keybind detected. Setting default. 'G' Key");
+                Debug.Log("Selfie Cam: Invalid '" + optionName + "' keybind detected. Setting default. '" + defaultKey + "' Key");
                 DaggerfallUI.AddHUDText("Selfie Cam:", 6f);
-                DaggerfallUI.AddHUDText("Invalid quick toggle keybind detected. Setting default. 'G' Key", 6f);
+                DaggerfallUI.AddHUDText("Invalid '" + optionName + "' keybind detected. Setting default. '" + defaultKey + "' Key", 6f);
+                return defaultKey;
+            }
+        }
+
+        public static void RefreshHUDVisibility_OnStartGame(object sender, EventArgs e)
+        {
+            if (hidingHud) { AutoUnhideHUD(); hidingHud = false; }
+
+            if (aiWasSupressed && GameManager.Instance != null)
+            {
+                GameManager.Instance.DisableAI = false;
+                aiWasSupressed = false;
             }
 
-            if (AllowKeyPressQuickToggle && QuickToggleState)
+            cameraLookFrozen = false;
+        }
+
+        public static void RefreshHUDVisibility_OnSaveLoad(SaveData_v1 saveData)
+        {
+            if (hidingHud) { AutoUnhideHUD(); hidingHud = false; }
+
+            if (aiWasSupressed && GameManager.Instance != null)
             {
+                GameManager.Instance.DisableAI = false;
+                aiWasSupressed = false;
             }
-            else
-            {
-            }
+
+            cameraLookFrozen = false;
         }
 
         private void Update()
@@ -162,22 +209,22 @@ namespace SelfieCam
                 return;
 
             // Handle key presses
-            if (!GameManager.IsGamePaused && InputManager.Instance.GetAnyKeyDown() == QuickToggleKey)
+            if (InputManager.Instance.GetAnyKeyDown() == SelfieModeToggleKey)
             {
                 if (paperDoll)
                 {
-                    AutoUnhideHUD();
                     StopPaperDoll();
                 }
                 else
                 {
-                    AutoHideHUD();
                     StartPaperDoll();
                 }
             }
 
             if (paperDoll && !GameManager.Instance.TransportManager.IsOnFoot)
+            {
                 StopPaperDoll();
+            }
 
             //Update rotation cause there's a stupid issue for some reason
             if (paperDoll)
@@ -185,77 +232,69 @@ namespace SelfieCam
                 //Torch
                 if (torch != null)
                 {
-                    Vector3 dist = (paperDoll.transform.position - camera.transform.position);
+                    Vector3 dist = (paperDoll.transform.position - scCamera.transform.position);
                     dist.y = 0;
                     torch.transform.position = paperDoll.transform.position + dist.normalized * -torchDist + new Vector3(0, torchHeight, 0);
                 }
 
-                if (InputManager.Instance.GetKey(KeyCode.W))
+                // Toggle Camera Look Freeze State
+                if (AllowFreezeCameraKey && InputManager.Instance.GetKeyDown(FreezeCameraKey))
                 {
-                    paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.forward * 0.05f;
-                    pivot.transform.position = paperDoll.transform.position + new Vector3(0, .06f, 0);
+                    cameraLookFrozen = !cameraLookFrozen;
                 }
-                if (InputManager.Instance.GetKey(KeyCode.S))
+
+                if (AllowPaperdollMovement)
                 {
-                    paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.forward * -0.05f;
-                    pivot.transform.position = paperDoll.transform.position + new Vector3(0, .06f, 0);
-                }
-                if (InputManager.Instance.GetKey(KeyCode.A))
-                {
-                    paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.right * -0.05f;
-                    pivot.transform.position = paperDoll.transform.position + new Vector3(0, .06f, 0);
-                }
-                if (InputManager.Instance.GetKey(KeyCode.D))
-                {
-                    paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.right * 0.05f;
-                    pivot.transform.position = paperDoll.transform.position + new Vector3(0, .06f, 0);
-                }
-                if (InputManager.Instance.GetKey(KeyCode.Space))
-                {
-                    paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.up * -0.05f;
-                    pivot.transform.position = paperDoll.transform.position + new Vector3(0, .06f, 0);
-                }
-                if (InputManager.Instance.GetKey(KeyCode.LeftShift))
-                {
-                    paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.up * 0.05f;
-                    pivot.transform.position = paperDoll.transform.position + new Vector3(0, .06f, 0);
+                    if (InputManager.Instance.GetKey(MoveForwardKey))
+                    {
+                        paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.forward * (PaperdollMovementSpeed * 0.01f);
+                        pivot.transform.position = paperDoll.transform.position + new Vector3(0, .1f, 0);
+                    }
+                    if (InputManager.Instance.GetKey(MoveBackwardKey))
+                    {
+                        paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.forward * -(PaperdollMovementSpeed * 0.01f);
+                        pivot.transform.position = paperDoll.transform.position + new Vector3(0, .1f, 0);
+                    }
+                    if (InputManager.Instance.GetKey(MoveLeftKey))
+                    {
+                        paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.right * -(PaperdollMovementSpeed * 0.01f);
+                        pivot.transform.position = paperDoll.transform.position + new Vector3(0, .1f, 0);
+                    }
+                    if (InputManager.Instance.GetKey(MoveRightKey))
+                    {
+                        paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.right * (PaperdollMovementSpeed * 0.01f);
+                        pivot.transform.position = paperDoll.transform.position + new Vector3(0, .1f, 0);
+                    }
+                    if (InputManager.Instance.GetKey(MoveUpKey))
+                    {
+                        paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.up * -(PaperdollMovementSpeed * 0.01f);
+                        pivot.transform.position = paperDoll.transform.position + new Vector3(0, .1f, 0);
+                    }
+                    if (InputManager.Instance.GetKey(MoveDownKey))
+                    {
+                        paperDoll.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.up * (PaperdollMovementSpeed * 0.01f);
+                        pivot.transform.position = paperDoll.transform.position + new Vector3(0, .1f, 0);
+                    }
                 }
 
                 // Update greenscreen object position if it exists, this way it will follow properly if moving camera view around, etc. 
                 if (greenScreenObject) { greenScreenObject.transform.localPosition = paperDoll.transform.localPosition - paperDoll.transform.forward * 0.25f; }
 
                 // Toggle Greenscreen Object 
-                if (InputManager.Instance.GetKeyDown(KeyCode.F))
+                if (AllowGreenScreen && InputManager.Instance.GetKeyDown(GreenScreenToggleKey))
                 {
                     ToggleGreenScreenObject();
                 }
 
                 //Toggle DOF
-                if (InputManager.Instance.GetKeyDown(KeyCode.G))
+                if (AllowDepthOfField && InputManager.Instance.GetKeyDown(DepthOfFieldToggleKey))
                 {
                     volume.enabled = !volume.enabled;
                 }
-
-                //Toggle layers
-                /*if (InputManager.Instance.GetKeyDown(KeyCode.S))
-                {
-                    layer++;
-
-                    if (layer > 1)
-                        layer = 0;
-
-                    var layerFlags = PaperDollRenderer.LayerFlags.All;
-
-                    if (layer == 1)
-                        layerFlags = PaperDollRenderer.LayerFlags.Body;
-
-                    DaggerfallUI.Instance.PaperDollRenderer.Refresh(layerFlags);
-                    paperDoll.GetComponent<DaggerfallBillboard>().SetMaterial(DaggerfallUI.Instance.PaperDollRenderer.PaperDollTexture, new Vector2(1.4f, 2.2f));
-                }*/
             }
         }
 
-        public void AutoHideHUD()
+        public static void AutoHideHUD()
         {
             DaggerfallHUD dfuHud = DaggerfallUI.Instance.DaggerfallHUD;
 
@@ -284,7 +323,7 @@ namespace SelfieCam
             dfuHud.ShowLocalQuestPlaces = false;
         }
 
-        public void AutoUnhideHUD()
+        public static void AutoUnhideHUD()
         {
             DaggerfallHUD dfuHud = DaggerfallUI.Instance.DaggerfallHUD;
 
@@ -308,6 +347,16 @@ namespace SelfieCam
 
         public void StopPaperDoll()
         {
+            if (HideHudInSelfieMode || hidingHud) { AutoUnhideHUD(); hidingHud = false; }
+
+            if (aiWasSupressed && GameManager.Instance != null)
+            {
+                GameManager.Instance.DisableAI = false;
+                aiWasSupressed = false;
+            }
+
+            cameraLookFrozen = false;
+
             if (torch != null)
             {
                 torch.transform.localPosition = torchPosition;
@@ -331,14 +380,14 @@ namespace SelfieCam
             if (headBobberEnabled)
                 GameManager.Instance.PlayerObject.GetComponent<HeadBobber>().enabled = true;
 
-            camera.transform.parent = previousCameraParent.transform;
-            camera.transform.localPosition = new Vector3(0, 0, 0);
-            camera.transform.localRotation = Quaternion.identity;
+            scCamera.transform.parent = previousCameraParent.transform;
+            scCamera.transform.localPosition = new Vector3(0, 0, 0);
+            scCamera.transform.localRotation = Quaternion.identity;
 
             Destroy(volume.profile);
             Destroy(volume.gameObject);
 
-            Destroy(camera.GetComponent<SC_MousePivot>());
+            Destroy(scCamera.GetComponent<SC_MousePivot>());
             Destroy(pivot);
         }
 
@@ -361,6 +410,14 @@ namespace SelfieCam
             if (GameManager.Instance.PlayerSpellCasting.IsPlayingAnim)
                 return;
 
+            if (HideHudInSelfieMode) { AutoHideHUD(); hidingHud = true; }
+
+            if (SupressAIInSelfieMode && GameManager.Instance != null)
+            {
+                GameManager.Instance.DisableAI = true;
+                aiWasSupressed = true;
+            }
+
             torch = GetPlayerTorch();
             if (torch != null)
             {
@@ -370,11 +427,7 @@ namespace SelfieCam
                     SpawnTorch(torch);
             }
 
-            layer = 0;
-
             paperDoll = SpawnPaperDoll(GameManager.Instance.PlayerObject.transform.position);
-
-            // Probably disable HUD stuff here. 
 
             GameManager.Instance.PlayerMotor.enabled = false;
             GameManager.Instance.RightHandWeapon.ShowWeapon = false;
@@ -387,22 +440,23 @@ namespace SelfieCam
             if (headBobberEnabled)
                 GameManager.Instance.PlayerObject.GetComponent<HeadBobber>().enabled = false;
 
-            //Camera Junk
-
+            //Camera Related Stuff
             pivot = new GameObject("Pivot");
-            pivot.transform.position = GameManager.Instance.PlayerObject.transform.position + new Vector3(0, .1f, 0);
+            float yOffset = (SelfieModeYOffset - 50) * 0.01f;
+            pivot.transform.position = GameManager.Instance.PlayerObject.transform.position + new Vector3(0, .1f + yOffset, 0);
             pivot.transform.forward = GameManager.Instance.PlayerObject.transform.forward;
+            pivot.transform.localScale = new Vector3(StartingZoomLevel, StartingZoomLevel, StartingZoomLevel);
 
             previousCameraParent = GameManager.Instance.MainCamera.transform.parent;
 
-            camera = GameManager.Instance.MainCamera;
+            scCamera = GameManager.Instance.MainCamera;
 
-            camera.transform.parent = pivot.transform;
-            camera.transform.parent = pivot.transform;
-            camera.transform.localPosition = new Vector3(0, 0, -2);
-            camera.transform.localRotation = Quaternion.identity;
+            scCamera.transform.parent = pivot.transform;
+            scCamera.transform.parent = pivot.transform;
+            scCamera.transform.localPosition = new Vector3(0, 0, -2);
+            scCamera.transform.localRotation = Quaternion.identity;
 
-            var mousePivot = camera.gameObject.AddComponent<SC_MousePivot>();
+            var mousePivot = scCamera.gameObject.AddComponent<SC_MousePivot>();
             mousePivot.SetPivot(pivot.transform, pivot.transform.rotation);
 
             //Post Processing
@@ -422,12 +476,23 @@ namespace SelfieCam
             depthofField.focusDistance.Override(1.6f);
             depthofField.aperture.Override(6.2f);
             depthofField.focalLength.Override(58);
+
+            if (AllowDepthOfField)
+            {
+                if (DepthOfFieldStartingState)
+                    volume.enabled = true;
+                else
+                    volume.enabled = false;
+            }
+            else
+                volume.enabled = false;
         }
 
         public GameObject SpawnPaperDoll(Vector3 position)
         {
             GameObject go = new GameObject("Selfie Cam Paper Doll");
-            go.transform.position = position + new Vector3(0, 0.04f, 0); // This was to "fix" the left foot being slightly in the ground thing. 
+            float yOffset = (SelfieModeYOffset - 50) * 0.01f;
+            go.transform.position = position + new Vector3(0, yOffset, 0); // This was to "fix" the left foot being slightly in the ground thing.
 
             var billboard = go.AddComponent<DaggerfallBillboard>();
 
@@ -458,19 +523,19 @@ namespace SelfieCam
 
                 var billboard = greenScreenObject.AddComponent<DaggerfallBillboard>();
 
-                Texture2D texture = new Texture2D(4, 4);
-                Color[] greenColors = new Color[4 * 4];
-                Color greenColor = Color.green;
+                Texture2D texture = new Texture2D(GreenScreenWidth, GreenScreenHeight);
+                Color32[] screenColors = new Color32[GreenScreenWidth * GreenScreenHeight];
+                Color32 screenColor = GreenScreenColor;
 
-                for (int i = 0; i < greenColors.Length; i++)
+                for (int i = 0; i < screenColors.Length; i++)
                 {
-                    greenColors[i] = greenColor;
+                    screenColors[i] = screenColor;
                 }
 
-                texture.SetPixels(greenColors);
+                texture.SetPixels32(screenColors);
                 texture.Apply();
 
-                billboard.SetMaterial(texture, new Vector2(4, 4));
+                billboard.SetMaterial(texture, new Vector2(GreenScreenWidth, GreenScreenHeight));
             }
             else
             {
