@@ -3,7 +3,7 @@
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
 // Author:          Kirk.O
 // Created On: 	    8/19/2024, 1:30 PM
-// Last Edit:		8/24/2024, 11:30 PM
+// Last Edit:		8/25/2024, 11:40 PM
 // Version:			1.00
 // Special Thanks:  
 // Modifier:
@@ -69,6 +69,7 @@ namespace SelfieCam
         public static bool hidingHud = false;
         public static bool aiWasSupressed = false;
         public static bool cameraLookFrozen = false;
+        public static bool initialBloomState = false;
 
         // Added by Third Person Camera Code
 
@@ -109,6 +110,8 @@ namespace SelfieCam
             Debug.Log("Begin mod init: Selfie Cam");
 
             Instance = this;
+
+            initialBloomState = DaggerfallUnity.Settings.BloomEnable;
 
             mod.LoadSettings();
 
@@ -161,6 +164,11 @@ namespace SelfieCam
             }
 
             if (!AllowFreezeCameraKey && cameraLookFrozen) { cameraLookFrozen = false; }
+
+            if (!AllowDepthOfField && Instance.volume != null)
+            {
+                Instance.volume.enabled = false;
+            }
         }
 
         public static KeyCode RegisterModFunctionKey(string group, string optionName, KeyCode defaultKey)
@@ -179,6 +187,11 @@ namespace SelfieCam
 
         public static void RefreshHUDVisibility_OnStartGame(object sender, EventArgs e)
         {
+            if (Instance.paperDoll)
+            {
+                Instance.StopPaperDoll();
+            }
+
             if (hidingHud) { AutoUnhideHUD(); hidingHud = false; }
 
             if (aiWasSupressed && GameManager.Instance != null)
@@ -188,10 +201,17 @@ namespace SelfieCam
             }
 
             cameraLookFrozen = false;
+
+            initialBloomState = DaggerfallUnity.Settings.BloomEnable;
         }
 
         public static void RefreshHUDVisibility_OnSaveLoad(SaveData_v1 saveData)
         {
+            if (Instance.paperDoll)
+            {
+                Instance.StopPaperDoll();
+            }
+
             if (hidingHud) { AutoUnhideHUD(); hidingHud = false; }
 
             if (aiWasSupressed && GameManager.Instance != null)
@@ -201,6 +221,8 @@ namespace SelfieCam
             }
 
             cameraLookFrozen = false;
+
+            initialBloomState = DaggerfallUnity.Settings.BloomEnable;
         }
 
         private void Update()
@@ -365,7 +387,13 @@ namespace SelfieCam
             if (torchObject != null)
                 Destroy(torchObject);
 
-            if (greenScreenObject) { Destroy(greenScreenObject); }
+            if (greenScreenObject)
+            {
+                if (initialBloomState)
+                    DaggerfallUnity.Settings.BloomEnable = true;
+
+                Destroy(greenScreenObject);
+            }
 
             Destroy(paperDoll);
             paperDoll = null;
@@ -472,7 +500,7 @@ namespace SelfieCam
 
             var depthofField = (DepthOfField)volume.profile.AddSettings(typeof(DepthOfField));
 
-            depthofField.enabled.Override(true);
+            depthofField.enabled.Override(true); // Continue here tomorrow I guess, see if I could make some settings for these possibly, will see. 
             depthofField.focusDistance.Override(1.6f);
             depthofField.aperture.Override(6.2f);
             depthofField.focalLength.Override(58);
@@ -536,9 +564,32 @@ namespace SelfieCam
                 texture.Apply();
 
                 billboard.SetMaterial(texture, new Vector2(GreenScreenWidth, GreenScreenHeight));
+
+                Shader shader = Shader.Find("Unlit/Texture");
+                Material material = new Material(shader);
+                material.mainTexture = texture;
+
+                MeshRenderer meshRenderer = greenScreenObject.GetComponent<MeshRenderer>();
+
+                if (meshRenderer != null)
+                    meshRenderer.sharedMaterial = material;
+
+                if (DaggerfallUnity.Settings.BloomEnable)
+                {
+                    DaggerfallUnity.Settings.BloomEnable = false;
+                    GameManager.Instance.StartGameBehaviour.DeployCoreGameEffectSettings(CoreGameEffectSettingsGroups.Bloom);
+                    Debug.Log("Selfie Cam: Disabling Bloom effect for Green Screen Mode.");
+                }
             }
             else
             {
+                if (initialBloomState)
+                {
+                    DaggerfallUnity.Settings.BloomEnable = true;
+                    GameManager.Instance.StartGameBehaviour.DeployCoreGameEffectSettings(CoreGameEffectSettingsGroups.Bloom);
+                    Debug.Log("Selfie Cam: Enabling Bloom effect after exiting Green Screen Mode.");
+                }
+
                 Destroy(greenScreenObject);
             }
         }
