@@ -3,9 +3,9 @@
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
 // Author:          Kirk.O
 // Created On: 	    8/19/2024, 1:30 PM
-// Last Edit:		8/25/2024, 11:40 PM
+// Last Edit:		8/26/2024, 7:30 PM
 // Version:			1.00
-// Special Thanks:  
+// Special Thanks:  Joshcamas, Jodie
 // Modifier:
 
 using UnityEngine;
@@ -30,7 +30,7 @@ namespace SelfieCam
         // General Options
         public static KeyCode SelfieModeToggleKey { get; set; }
         public static bool HideHudInSelfieMode { get; set; }
-        public static bool SupressAIInSelfieMode { get; set; }
+        public static bool SuppressAIInSelfieMode { get; set; }
         public static int SelfieModeYOffset { get; set; }
 
         // Camera Options
@@ -55,6 +55,9 @@ namespace SelfieCam
         // Depth Of Field Options
         public static bool AllowDepthOfField { get; set; }
         public static bool DepthOfFieldStartingState { get; set; }
+        public static int DofFocusDistance { get; set; }
+        public static int DofAperture { get; set; }
+        public static int DofFocalLength { get; set; }
         public static KeyCode DepthOfFieldToggleKey { get; set; }
 
         // Green Screen Options
@@ -64,14 +67,16 @@ namespace SelfieCam
         public static Color32 GreenScreenColor { get; set; }
         public static KeyCode GreenScreenToggleKey { get; set; }
 
+        // Misc Options
+        public static bool AllowSuppressAIQuickToggle { get; set; }
+        public static KeyCode SuppressAIToggleKey { get; set; }
+
         // Variables
         public static bool[] hudOriginalValues = { false, false, false, false, false, false, false, false, false, false, false }; // Compass, Vitals, Crosshair, InteractionModeIcon, ActiveSpells, ArrowCount, BreathBar, PopupText, MidScreenText, EscortingFaces, LocalQuestPlaces
         public static bool hidingHud = false;
         public static bool aiWasSupressed = false;
         public static bool cameraLookFrozen = false;
         public static bool initialBloomState = false;
-
-        // Added by Third Person Camera Code
 
         private GameObject paperDoll;
         private GameObject pivot;
@@ -90,8 +95,6 @@ namespace SelfieCam
         private Vector3 torchPosition;
 
         public GameObject greenScreenObject;
-
-        // Added by Third Person Camera Code
 
         [Invoke(StateManager.StateTypes.Start, 0)]
         public static void Init(InitParams initParams)
@@ -115,26 +118,26 @@ namespace SelfieCam
 
             mod.LoadSettings();
 
-            StartGameBehaviour.OnStartGame += RefreshHUDVisibility_OnStartGame;
-            SaveLoadManager.OnLoad += RefreshHUDVisibility_OnSaveLoad;
+            StartGameBehaviour.OnStartGame += RefreshVariousStates_OnStartGame;
+            SaveLoadManager.OnLoad += RefreshVariousStates_OnSaveLoad;
 
             Debug.Log("Finished mod init: Selfie Cam");
         }
 
         private static void LoadSettings(ModSettings modSettings, ModSettingsChange change)
         {
-            SelfieModeToggleKey = RegisterModFunctionKey("GeneralSettings", "SelfieModeToggleKey", KeyCode.O);
+            SelfieModeToggleKey = RegisterModFunctionKey("GeneralSettings", "SelfieModeToggleKey", KeyCode.P);
             HideHudInSelfieMode = mod.GetSettings().GetValue<bool>("GeneralSettings", "AutoHideHud");
-            SupressAIInSelfieMode = mod.GetSettings().GetValue<bool>("GeneralSettings", "SupressAiInSelfieMode");
+            SuppressAIInSelfieMode = mod.GetSettings().GetValue<bool>("GeneralSettings", "SuppressAiInSelfieMode");
             SelfieModeYOffset = mod.GetSettings().GetValue<int>("GeneralSettings", "InitialYOffset");
 
             StartingZoomLevel = mod.GetSettings().GetValue<float>("CameraSettings", "StartingZoomLevel");
             ZoomIncrements = mod.GetSettings().GetValue<int>("CameraSettings", "ZoomIncrements");
             AllowZoomKeys = mod.GetSettings().GetValue<bool>("CameraSettings", "AllowZoomKeys");
-            ZoomInKey = RegisterModFunctionKey("CameraSettings", "ZoomInKey", KeyCode.J);
-            ZoomOutKey = RegisterModFunctionKey("CameraSettings", "ZoomOutKey", KeyCode.N);
+            ZoomInKey = RegisterModFunctionKey("CameraSettings", "ZoomInKey", KeyCode.E);
+            ZoomOutKey = RegisterModFunctionKey("CameraSettings", "ZoomOutKey", KeyCode.Q);
             AllowFreezeCameraKey = mod.GetSettings().GetValue<bool>("CameraSettings", "AllowFreezeCameraKey");
-            FreezeCameraKey = RegisterModFunctionKey("CameraSettings", "FreezeCameraKey", KeyCode.K);
+            FreezeCameraKey = RegisterModFunctionKey("CameraSettings", "FreezeCameraKey", KeyCode.R);
 
             AllowPaperdollMovement = mod.GetSettings().GetValue<bool>("MovementSettings", "AllowPaperdollMovement");
             PaperdollMovementSpeed = mod.GetSettings().GetValue<int>("MovementSettings", "PaperdollMovementSpeed");
@@ -142,22 +145,34 @@ namespace SelfieCam
             MoveBackwardKey = RegisterModFunctionKey("MovementSettings", "MoveBackwardKey", KeyCode.S);
             MoveLeftKey = RegisterModFunctionKey("MovementSettings", "MoveLeftKey", KeyCode.A);
             MoveRightKey = RegisterModFunctionKey("MovementSettings", "MoveRightKey", KeyCode.D);
-            MoveUpKey = RegisterModFunctionKey("MovementSettings", "MoveUpKey", KeyCode.Y);
-            MoveDownKey = RegisterModFunctionKey("MovementSettings", "MoveDownKey", KeyCode.H);
+            MoveUpKey = RegisterModFunctionKey("MovementSettings", "MoveUpKey", KeyCode.F);
+            MoveDownKey = RegisterModFunctionKey("MovementSettings", "MoveDownKey", KeyCode.V);
 
             AllowDepthOfField = mod.GetSettings().GetValue<bool>("DepthOfFieldSettings", "AllowDepthOfField");
             DepthOfFieldStartingState = mod.GetSettings().GetValue<bool>("DepthOfFieldSettings", "DofStartingState");
-            DepthOfFieldToggleKey = RegisterModFunctionKey("DepthOfFieldSettings", "DepthOfFieldToggleKey", KeyCode.U);
+            DofFocusDistance = mod.GetSettings().GetValue<int>("DepthOfFieldSettings", "FocusDistance");
+            DofAperture = mod.GetSettings().GetValue<int>("DepthOfFieldSettings", "Aperture");
+            DofFocalLength = mod.GetSettings().GetValue<int>("DepthOfFieldSettings", "FocalLength");
+            DepthOfFieldToggleKey = RegisterModFunctionKey("DepthOfFieldSettings", "DepthOfFieldToggleKey", KeyCode.C);
 
             AllowGreenScreen = mod.GetSettings().GetValue<bool>("GreenScreenSettings", "AllowGreenScreen");
             GreenScreenWidth = mod.GetSettings().GetValue<int>("GreenScreenSettings", "GreenScreenWidth");
             GreenScreenHeight = mod.GetSettings().GetValue<int>("GreenScreenSettings", "GreenScreenHeight");
             GreenScreenColor = mod.GetSettings().GetValue<Color32>("GreenScreenSettings", "GreenScreenColor");
-            GreenScreenToggleKey = RegisterModFunctionKey("GreenScreenSettings", "GreenScreenToggleKey", KeyCode.G);
+            GreenScreenToggleKey = RegisterModFunctionKey("GreenScreenSettings", "GreenScreenToggleKey", KeyCode.Z);
+
+            AllowSuppressAIQuickToggle = mod.GetSettings().GetValue<bool>("MiscSettings", "AllowSuppressAiKey");
+            SuppressAIToggleKey = RegisterModFunctionKey("MiscSettings", "SuppressAiKey", KeyCode.X);
 
             if (!HideHudInSelfieMode && hidingHud) { AutoUnhideHUD(); hidingHud = false; }
 
-            if (!SupressAIInSelfieMode && aiWasSupressed && GameManager.Instance != null)
+            if (!SuppressAIInSelfieMode && aiWasSupressed && GameManager.Instance != null)
+            {
+                GameManager.Instance.DisableAI = false;
+                aiWasSupressed = false;
+            }
+
+            if (!AllowSuppressAIQuickToggle && !SuppressAIInSelfieMode && aiWasSupressed && GameManager.Instance != null)
             {
                 GameManager.Instance.DisableAI = false;
                 aiWasSupressed = false;
@@ -185,7 +200,7 @@ namespace SelfieCam
             }
         }
 
-        public static void RefreshHUDVisibility_OnStartGame(object sender, EventArgs e)
+        public static void RefreshVariousStates_OnStartGame(object sender, EventArgs e)
         {
             if (Instance.paperDoll)
             {
@@ -205,7 +220,7 @@ namespace SelfieCam
             initialBloomState = DaggerfallUnity.Settings.BloomEnable;
         }
 
-        public static void RefreshHUDVisibility_OnSaveLoad(SaveData_v1 saveData)
+        public static void RefreshVariousStates_OnSaveLoad(SaveData_v1 saveData)
         {
             if (Instance.paperDoll)
             {
@@ -231,7 +246,7 @@ namespace SelfieCam
                 return;
 
             // Handle key presses
-            if (InputManager.Instance.GetAnyKeyDown() == SelfieModeToggleKey)
+            if (InputManager.Instance.GetKeyDown(SelfieModeToggleKey))
             {
                 if (paperDoll)
                 {
@@ -246,6 +261,26 @@ namespace SelfieCam
             if (paperDoll && !GameManager.Instance.TransportManager.IsOnFoot)
             {
                 StopPaperDoll();
+            }
+
+            // Toggle AI suppression state, if key is enabled
+            if (AllowSuppressAIQuickToggle && InputManager.Instance.GetKeyDown(SuppressAIToggleKey))
+            {
+                if (GameManager.Instance != null)
+                {
+                    if (!GameManager.Instance.DisableAI)
+                    {
+                        GameManager.Instance.DisableAI = true;
+                        aiWasSupressed = true;
+                        DaggerfallUI.AddHUDText("Selfie Cam: AI Turned OFF", 2f);
+                    }
+                    else
+                    {
+                        GameManager.Instance.DisableAI = false;
+                        aiWasSupressed = false;
+                        DaggerfallUI.AddHUDText("Selfie Cam: AI Turned ON", 2f);
+                    }
+                }
             }
 
             //Update rotation cause there's a stupid issue for some reason
@@ -440,7 +475,7 @@ namespace SelfieCam
 
             if (HideHudInSelfieMode) { AutoHideHUD(); hidingHud = true; }
 
-            if (SupressAIInSelfieMode && GameManager.Instance != null)
+            if (SuppressAIInSelfieMode && GameManager.Instance != null)
             {
                 GameManager.Instance.DisableAI = true;
                 aiWasSupressed = true;
@@ -500,10 +535,10 @@ namespace SelfieCam
 
             var depthofField = (DepthOfField)volume.profile.AddSettings(typeof(DepthOfField));
 
-            depthofField.enabled.Override(true); // Continue here tomorrow I guess, see if I could make some settings for these possibly, will see. 
-            depthofField.focusDistance.Override(1.6f);
-            depthofField.aperture.Override(6.2f);
-            depthofField.focalLength.Override(58);
+            depthofField.enabled.Override(true);
+            depthofField.focusDistance.Override(DofFocusDistance * 0.1f);
+            depthofField.aperture.Override(DofAperture * 0.1f);
+            depthofField.focalLength.Override(DofFocalLength);
 
             if (AllowDepthOfField)
             {
@@ -520,7 +555,7 @@ namespace SelfieCam
         {
             GameObject go = new GameObject("Selfie Cam Paper Doll");
             float yOffset = (SelfieModeYOffset - 50) * 0.01f;
-            go.transform.position = position + new Vector3(0, yOffset, 0); // This was to "fix" the left foot being slightly in the ground thing.
+            go.transform.position = position + new Vector3(0, yOffset, 0);
 
             var billboard = go.AddComponent<DaggerfallBillboard>();
 

@@ -7,23 +7,23 @@
             "IsAdvanced": false,
             "Keys": [
 				{
-                    "Value": "O",
+                    "Value": "P",
                     "Name": "SelfieModeToggleKey",
-                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = O",
+                    "Description": "Keybind To Activate 'Selfie Mode' || Default = P",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
                 },
 				{
                     "Value": true,
                     "Name": "AutoHideHud",
-                    "Description": "Allows Mod To Hide HUD Elements || Default = True",
+                    "Description": "Auto Hide HUD When In Selfie Mode || Default = True",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
                 },
 				{
                     "Value": true,
-                    "Name": "SupressAiInSelfieMode",
-                    "Description": "Allows Mod To Hide HUD Elements || Default = True",
+                    "Name": "SuppressAiInSelfieMode",
+                    "Description": "Enemy AI Suppressed While In Selfie Mode || Default = True",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
                 },
@@ -32,70 +32,9 @@
                     "Max": 100,
                     "Value": 54,
                     "Name": "InitialYOffset",
-                    "Description": "Changes X Position Of Progress Bars",
+                    "Description": "Changes Initial Y Position Of Paperdoll In Selfie Mode",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
-                }
-            ],
-            "$version": "v1"
-        },
-		{
-            "Name": "CameraSettings",
-            "Description": "Related To Hiding Specific HUD Elements",
-            "IsAdvanced": false,
-            "Keys": [
-				{
-                    "Min": 0.1,
-                    "Max": 5.0,
-                    "Value": 1.0,
-                    "Name": "StartingZoomLevel",
-                    "Description": "Volume That Notification Sounds Will Play",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderFloatKey"
-                },
-				{
-                    "Min": 1,
-                    "Max": 100,
-                    "Value": 10,
-                    "Name": "ZoomIncrements",
-                    "Description": "Changes X Position Of Progress Bars",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
-                },
-				{
-                    "Value": false,
-                    "Name": "AllowZoomKeys",
-                    "Description": "Allows Mod To Hide HUD Elements || Default = False",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
-                },
-				{
-                    "Value": "J",
-                    "Name": "ZoomInKey",
-                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = J",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
-                },
-				{
-                    "Value": "N",
-                    "Name": "ZoomOutKey",
-                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = N",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
-                },
-				{
-                    "Value": false,
-                    "Name": "AllowFreezeCameraKey",
-                    "Description": "Allows Mod To Hide HUD Elements || Default = False",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
-                },
-				{
-                    "Value": "K",
-                    "Name": "FreezeCameraKey",
-                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = K",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
                 }
             ],
             "$version": "v1"
@@ -115,14 +54,180 @@
             "$version": "v1"
         },
 		{
+            "Name": "   ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "    ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "     ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "      ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "       ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "        ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "         ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "          ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "           ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "CameraSettings",
+            "Description": "Related To Selfie Mode Camera Settings",
+            "IsAdvanced": false,
+            "Keys": [
+				{
+                    "Min": 0.1,
+                    "Max": 5.0,
+                    "Value": 1.0,
+                    "Name": "StartingZoomLevel",
+                    "Description": "Changes Initial Zoom Level When Entering Selfie Mode",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderFloatKey"
+                },
+				{
+                    "Min": 1,
+                    "Max": 100,
+                    "Value": 10,
+                    "Name": "ZoomIncrements",
+                    "Description": "How Precise Increments Are When Zooming Camera",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
+                },
+				{
+                    "Value": true,
+                    "Name": "AllowZoomKeys",
+                    "Description": "Allows Alternate Keys To Be Used For Zooming || Default = True",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+				{
+                    "Value": "E",
+                    "Name": "ZoomInKey",
+                    "Description": "Keybind Used To Zoom In Camera || Default = E",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
+                },
+				{
+                    "Value": "Q",
+                    "Name": "ZoomOutKey",
+                    "Description": "Keybind Used To Zoom Out Camera || Default = Q",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
+                },
+				{
+                    "Value": true,
+                    "Name": "AllowFreezeCameraKey",
+                    "Description": "Allows Freezing Of Selfie Mode Camera Rotation || Default = True",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+				{
+                    "Value": "R",
+                    "Name": "FreezeCameraKey",
+                    "Description": "Keybind Used To Freeze Camera Rotation || Default = R",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
+                }
+            ],
+            "$version": "v1"
+        },
+		{
+            "Name": "            ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "             ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "              ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "               ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "                ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "                 ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
             "Name": "MovementSettings",
-            "Description": "Related To Misc Settings And Options",
+            "Description": "Related To Selfie Mode Paperdoll Movement Settings",
             "IsAdvanced": false,
             "Keys": [
 				{
                     "Value": true,
                     "Name": "AllowPaperdollMovement",
-                    "Description": "Allows Mod To Hide HUD Elements || Default = True",
+                    "Description": "Allows Paperdoll To Move Freely In Selfie Mode || Default = True",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
                 },
@@ -131,49 +236,49 @@
                     "Max": 20,
                     "Value": 5,
                     "Name": "PaperdollMovementSpeed",
-                    "Description": "Changes X Position Of Progress Bars",
+                    "Description": "How Quickly The Paperdoll Moves In Selfie Mode",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
                 },
 				{
                     "Value": "W",
                     "Name": "MoveForwardKey",
-                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = W",
+                    "Description": "Keybind Used To Move Paperdoll Forward || Default = W",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
                 },
 				{
                     "Value": "S",
                     "Name": "MoveBackwardKey",
-                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = S",
+                    "Description": "Keybind Used To Move Paperdoll Backward || Default = S",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
                 },
 				{
                     "Value": "A",
                     "Name": "MoveLeftKey",
-                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = A",
+                    "Description": "Keybind Used To Move Paperdoll Left || Default = A",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
                 },
 				{
                     "Value": "D",
                     "Name": "MoveRightKey",
-                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = D",
+                    "Description": "Keybind Used To Move Paperdoll Right || Default = D",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
                 },
 				{
-                    "Value": "Y",
+                    "Value": "F",
                     "Name": "MoveUpKey",
-                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = Y",
+                    "Description": "Keybind Used To Move Paperdoll Up || Default = F",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
                 },
 				{
-                    "Value": "H",
+                    "Value": "V",
                     "Name": "MoveDownKey",
-                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = H",
+                    "Description": "Keybind Used To Move Paperdoll Down || Default = V",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
                 }
@@ -181,28 +286,76 @@
             "$version": "v1"
         },
 		{
+            "Name": "                  ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "                   ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "                    ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
             "Name": "DepthOfFieldSettings",
-            "Description": "Related To Hiding Specific HUD Elements",
+            "Description": "Related To Depth Of Field Settings",
             "IsAdvanced": false,
             "Keys": [
                 {
                     "Value": false,
                     "Name": "AllowDepthOfField",
-                    "Description": "Allows Mod To Hide HUD Elements || Default = False",
+                    "Description": "Allow A Depth Of Field Effect In Selfie Mode || Default = False",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
                 },
 				{
                     "Value": true,
                     "Name": "DofStartingState",
-                    "Description": "Allows Mod To Hide HUD Elements || Default = True",
+                    "Description": "If Depth Of Field Should Be Initially Active || Default = True",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
                 },
 				{
-                    "Value": "U",
+                    "Min": 0,
+                    "Max": 150,
+                    "Value": 16,
+                    "Name": "FocusDistance",
+                    "Description": "Distance To The Point Of Focus",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
+                },
+				{
+                    "Min": 0,
+                    "Max": 320,
+                    "Value": 62,
+                    "Name": "Aperture",
+                    "Description": "Ratio Of Aperture. Smaller Value, Shallower The Depth Of Field",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
+                },
+				{
+                    "Min": 0,
+                    "Max": 300,
+                    "Value": 58,
+                    "Name": "FocalLength",
+                    "Description": "Distance Between Lens And Film. Larger Value, Shallower The Depth Of Field",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
+                },
+				{
+                    "Value": "C",
                     "Name": "DepthOfFieldToggleKey",
-                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = U",
+                    "Description": "Keybind Used To Toggle Depth Of Field Effect || Default = C",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
                 }
@@ -210,14 +363,70 @@
             "$version": "v1"
         },
 		{
+            "Name": "                     ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "                      ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "                       ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "                        ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "                         ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "                          ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "                           ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "                            ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
             "Name": "GreenScreenSettings",
-            "Description": "Related To Hiding Specific HUD Elements",
+            "Description": "Related To Green Screen Object Settings",
             "IsAdvanced": false,
             "Keys": [
                 {
                     "Value": false,
                     "Name": "AllowGreenScreen",
-                    "Description": "Allows Mod To Hide HUD Elements || Default = False",
+                    "Description": "Allows Use Of Green Screen Object || Default = False",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
                 },
@@ -226,7 +435,7 @@
                     "Max": 20,
                     "Value": 4,
                     "Name": "GreenScreenWidth",
-                    "Description": "Changes X Position Of Progress Bars",
+                    "Description": "Width Of Green Screen",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
                 },
@@ -235,7 +444,7 @@
                     "Max": 20,
                     "Value": 4,
                     "Name": "GreenScreenHeight",
-                    "Description": "Changes X Position Of Progress Bars",
+                    "Description": "Height Of Green Screen",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
                 },
@@ -247,14 +456,99 @@
                         "a": 255
                     },
                     "Name": "GreenScreenColor",
-                    "Description": "Color Used For The Progress Bar When Skill Is Ready To Level",
+                    "Description": "Color Of Green Screen Object",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ColorKey"
                 },
 				{
-                    "Value": "G",
+                    "Value": "Z",
                     "Name": "GreenScreenToggleKey",
-                    "Description": "Keybind Used To Quick Toggle Visibility Of HUD Elements || Default = G",
+                    "Description": "Keybind Used To Toggle Green Screen Object || Default = Z",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
+                }
+            ],
+            "$version": "v1"
+        },
+		{
+            "Name": "                             ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "                              ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "                               ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "                                ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "                                 ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "                                  ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "                                   ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "                                    ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "                                     ",
+            "Description": null,
+            "IsAdvanced": false,
+            "Keys": [],
+            "$version": "v1"
+        },
+		{
+            "Name": "MiscSettings",
+            "Description": "Related To Miscellaneous Mod Settings",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Value": false,
+                    "Name": "AllowSuppressAiKey",
+                    "Description": "Allows Use Of Hotkey To Suppress AI Outside Selfie Mode",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+				{
+                    "Value": "X",
+                    "Name": "SuppressAiKey",
+                    "Description": "Keybind Used To Quick Toggle Enemy AI || Default = X",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
                 }

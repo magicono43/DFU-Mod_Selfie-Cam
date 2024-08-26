@@ -1,9 +1,5 @@
 using UnityEngine;
-using DaggerfallWorkshop.Game.Utility.ModSupport;
 using DaggerfallWorkshop.Game;
-using DaggerfallWorkshop;
-using Wenzil.Console;
-using DaggerfallWorkshop.Game.Utility;
 
 namespace SelfieCam
 {
